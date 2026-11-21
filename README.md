@@ -48,6 +48,16 @@ The benchmark root contains the 19 names listed in `clipflow/settings.py`. Each 
 
 ## Train, calibrate, evaluate
 
+`main.py` runs the complete main experiment in one command: training, independent validation-threshold calibration, then all 19 test datasets. Default mode is N+P; `--mode P` selects proxy-only and `--mode N` natural-only. This entry point deliberately excludes the ablation sweeps.
+
+```bash
+python main.py --train-manifest data/splits/train.json --validation-manifest data/splits/validation.json --test-root data/benchmark --output runs/main_NP --device cuda:0
+```
+
+The default N+P schedule is 10 epochs with low-frequency masking ratio 0.1. P uses 30 epochs and ratio 1.0. Training/validation manifests and every benchmark folder are checked before training. `--checkpoint` skips training only for an existing consolidated checkpoint matching the selected main configuration. With data in the default locations, `python main.py --device cuda:0` is sufficient.
+
+The equivalent individual stages remain available for checkpoint management and ablations:
+
 ```bash
 python -m clipflow train --config configs/NP.json --train-manifest data/splits/train.json --output runs/NP --device cuda:0
 python -m clipflow calibrate --checkpoint runs/NP/last.pt --validation-manifest data/splits/validation.json --output runs/NP/calibration.json --device cuda:0

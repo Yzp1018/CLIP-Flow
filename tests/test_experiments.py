@@ -206,3 +206,25 @@ def test_actual_clip_component_with_random_small_architecture():
     model = CLIPFlow(Settings(dimension=8), encoder=encoder)
     result = model.score(torch.rand(2,3,32,32))
     assert result.shape == (2,) and torch.isfinite(result).all()
+
+
+def test_main_runs_training_calibration_and_all_19_benchmarks(tmp_path):
+    from main import main
+    from clipflow.settings import BENCHMARKS
+    torch.set_num_threads(1)
+    training = make_images(tmp_path/'train', 4, 20)
+    validation = make_images(tmp_path/'val', 3, 21)
+    train_manifest = save_manifest(tmp_path/'train.json', training)
+    val_manifest = save_manifest(tmp_path/'val.json', validation)
+    for index, name in enumerate(BENCHMARKS):
+        make_images(tmp_path/'benchmark'/name/'test/0_real', 1, 100+index)
+        make_images(tmp_path/'benchmark'/name/'test/1_fake', 1, 200+index)
+    output = tmp_path/'main_run'
+    result = main(['--train-manifest',str(train_manifest),'--validation-manifest',str(val_manifest),
+                   '--test-root',str(tmp_path/'benchmark'),'--output',str(output),
+                   '--epochs','1','--allow-other-count','--device','cpu'], encoder=TinyEncoder())
+    assert result['complete_suite'] and len(result['datasets'])==19
+    assert result['threshold'] is not None and result['mean_accuracy'] is not None
+    assert (output/'last.pt').is_file() and (output/'calibration.json').is_file()
+    state=torch.load(output/'last.pt',weights_only=True)
+    assert state['settings']['mode']=='NP' and state['settings']['ratio']==0.1
