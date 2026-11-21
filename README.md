@@ -1,5 +1,7 @@
 # CLIP-Flow
 
+English | [简体中文](README_zh-CN.md)
+
 Experiments for **CLIP-Flow: A Universal Discriminator for AI-Generated Images Inspired by Anomaly Detection** — Zhipeng Yuan, Kai Wang, Weize Quan, Dong-Ming Yan, and Tieru Wu, DFF 2025.
 
 [Paper](https://arxiv.org/abs/2508.09477) · [Published version](https://doi.org/10.1145/3746265.3759663) · [Provenance and reproduction limits](docs/REPRODUCTION.md)
