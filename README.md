@@ -6,7 +6,17 @@ Experiments for **CLIP-Flow: A Universal Discriminator for AI-Generated Images I
 
 [Paper](https://arxiv.org/abs/2508.09477) · [Published version](https://doi.org/10.1145/3746265.3759663) · [Implementation details](docs/IMPLEMENTATION.md)
 
-CLIP-Flow detects AI-generated images using frozen CLIP features, dimension reduction and normalizing flows. `main.py` runs the main experiment from training through validation-threshold calibration to evaluation on 19 test datasets. Separate entry points cover the ablation experiments.
+CLIP-Flow is a generalizable AI-generated image detector inspired by anomaly detection. It learns from natural images without requiring AI-generated images during training.
+
+## Core idea
+
+Detectors trained against particular generators can struggle with images from unseen generators. CLIP-Flow approaches this problem by constructing **proxy anomalies** from natural images through random frequency masking.
+
+A frozen CLIP encoder extracts image features, which are reduced in dimension, L2-normalized and passed to a normalizing flow. The key training objective is to **minimize the likelihood of proxy images**. Optionally, the model also maximizes the likelihood of natural images, learning to separate natural content from synthetic perturbations.
+
+At inference, the model uses negative log-likelihood as an anomaly score: larger values indicate a stronger prediction of an AI-generated image. The proxy-only (P) and joint (N+P) modes provide two ways to learn this distinction without training on outputs from a specific image generator.
+
+`main.py` runs the main experiment from training through validation-threshold calibration to evaluation on 19 test datasets. Separate entry points cover the ablation experiments.
 
 ## Experiment coverage
 
