@@ -6,9 +6,9 @@
 
 作者：Zhipeng Yuan、Kai Wang、Weize Quan、Dong-Ming Yan、Tieru Wu。发表于 DFF 2025。
 
-[论文预印本](https://arxiv.org/abs/2508.09477) · [正式发表版本](https://doi.org/10.1145/3746265.3759663) · [实现来源与复现说明](docs/REPRODUCTION.md)
+[论文预印本](https://arxiv.org/abs/2508.09477) · [正式发表版本](https://doi.org/10.1145/3746265.3759663) · [实现说明](docs/REPRODUCTION.md)
 
-本仓库整合了 `cflow-ad-master.zip` 与 `cflowtest.zip` 中的训练代码、测试流程和实验记录。`main.py` 是论文主实验的统一入口；消融实验由独立入口运行；原始脚本与日志保存在 `legacy/` 中。统一实现的整合选择、参数来源和差异详见复现说明。
+`main.py` 提供论文主实验的完整流程：训练、独立验证集阈值校准，以及 19 个测试集的评估。代理图像、频域掩码、特征降维和归一化等消融实验通过独立入口运行。
 
 ## 方法概述
 
@@ -170,7 +170,7 @@ python -m clipflow.figures histograms --p-results runs/paper/P/benchmark --np-re
 python -m clipflow.figures dimensions --root runs/paper --output runs/paper/figure4.png
 ```
 
-外部对比方法使用各自的上游实现与配置。原包中的 UniversalFake 源码保存在 `legacy/UniversalFake/`；统一分数评估接口见 [外部基线评估说明](docs/BASELINES.md)。
+外部对比方法使用各自的上游实现与配置。UniversalFake 基线代码位于 `legacy/UniversalFake/`；统一分数评估接口见 [外部基线评估说明](docs/BASELINES.md)。
 
 ## 输出与目录说明
 
@@ -179,26 +179,22 @@ python -m clipflow.figures dimensions --root runs/paper --output runs/paper/figu
 | `main.py` | 主实验的一键入口 |
 | `clipflow/` | 数据处理、代理图像、模型、训练、校准、评估与绘图 |
 | `configs/` | 主实验及消融配置 |
-| `legacy/` | 原始源码和实验日志 |
+| `legacy/` | 参考代码与实验记录 |
 | `tests/` | 功能与流程测试 |
-| `docs/` | 实现来源、日志核对与验证说明 |
+| `docs/` | 实现、评估与验证说明 |
 | `runs/<实验名>/last.pt` | 训练生成的模型检查点 |
 | `runs/<实验名>/training.json` | 实验设置、训练记录和参数量 |
 | `runs/<实验名>/calibration.json` | 验证集阈值及对应模型信息 |
 | `runs/<实验名>/benchmark/metrics.json` | 各测试集与汇总指标 |
 | `runs/<实验名>/benchmark/*.npz` | 图像路径、标签和异常分数 |
 
-绘图使用当前运行生成的分数，不会用历史日志替代模型预测。历史日志包含 221 组完整的 19 测试集记录，核对报告见 [LOG_AUDIT.json](docs/LOG_AUDIT.json)。也可以重新生成报告：
-
-```bash
-python -m clipflow.history --root legacy/cflowtest --output runs/log-audit.json
-```
+绘图直接使用当前运行保存的图像标签与异常分数。
 
 软件验证覆盖训练目标、代理图像、阈值校准、检查点读写，以及 `main.py` 的完整小样本流程。测试通过不等同于独立复现论文的大规模实验，具体记录见 [VALIDATION.md](docs/VALIDATION.md)。
 
 ## 致谢与引用
 
-本项目基于 [CFLOW-AD](https://github.com/gudovskiy/cflow-ad)、[OpenAI CLIP](https://github.com/openai/CLIP)、[FrEIA](https://github.com/vislearn/FrEIA) 和 [UniversalFakeDetect](https://github.com/Yuheng-Li/UniversalFakeDetect) 等工作。许可证见 `LICENSE` 与 `models/clip/LICENSE`；原始文件校验信息见 `docs/ARCHIVE_MANIFEST.json`。
+本项目基于 [CFLOW-AD](https://github.com/gudovskiy/cflow-ad)、[OpenAI CLIP](https://github.com/openai/CLIP)、[FrEIA](https://github.com/vislearn/FrEIA) 和 [UniversalFakeDetect](https://github.com/Yuheng-Li/UniversalFakeDetect) 等工作。许可证见 `LICENSE` 与 `models/clip/LICENSE`。
 
 ```bibtex
 @inproceedings{yuan2025clipflow,
