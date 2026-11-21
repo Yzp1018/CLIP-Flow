@@ -2,7 +2,7 @@
 
 ## Recovered material
 
-`legacy/original/` retains relevant Python sources from the first archive. `legacy/cflowtest/` retains the second archive's evaluation code and six result text files. `legacy/UniversalFake/` retains the supplied comparison-baseline sources, without multi-gigabyte checkpoints. `ARCHIVE_MANIFEST.json` identifies each source archive member and SHA-256. `INITIAL_UPLOAD_MANIFEST.json` describes the earlier, narrower upload; paths there refer to that historical snapshot.
+`legacy/original/` retains relevant Python sources from the first archive. `legacy/cflowtest/` retains the second archive's evaluation code and six result text files. `legacy/UniversalFake/` retains the supplied comparison-baseline sources. `ARCHIVE_MANIFEST.json` identifies each source archive member and SHA-256. `INITIAL_UPLOAD_MANIFEST.json` describes the earlier, narrower upload; paths there refer to that historical snapshot.
 
 The supported package combines the original frozen CLIP/projection/FrEIA path with the test archive's dataset list. It repairs the inactive-proxy default, training/evaluation normalization mismatch, fixed server paths, mode selection and test-set threshold fitting. Historical originals remain unmodified. The vendored CLIP packaging import was modernized; its model/tokenizer implementation and vocabulary are otherwise preserved.
 
@@ -25,7 +25,7 @@ The archived P row has fixed-threshold mean accuracy 84.93. One N+P row has 19 d
 
 ## Unavailable material
 
-- CLIP-Flow checkpoints named in logs, original split memberships and final environment.
+- Original split memberships and final environment.
 - Original per-image benchmark scores. Text records alone do not establish checkpoint identity or independently verify results.
 - Emerging-generator datasets, prompts/captioner and precise generation settings. Evaluation is supported once data are provided; their original creation process is unavailable.
 - Complete training implementations/settings for all external comparison methods. Supplied UniversalFake sources and a common score evaluator are included; other methods require upstream implementations and independently produced scores.

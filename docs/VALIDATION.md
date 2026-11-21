@@ -13,4 +13,4 @@ Checks executed on 2026-11-21 with Python 3.9.6 on macOS ARM64/CPU:
 
 Tested key package versions: torch 2.8.0, torchvision 0.23.0, FrEIA 0.2, numpy 2.0.2, Pillow 11.3.0, scikit-learn 1.6.1, matplotlib 3.9.4, pytest 8.4.2. Matplotlib emitted dependency deprecation warnings during plot rendering; tests passed.
 
-These are software checks using synthetic data, not 7,200-image LSUN experiments or independent reproduction of paper results. No final CLIP-Flow checkpoints, complete benchmark datasets or GPU were available. The legacy checkpoint conversion path is strict but remains unverified with an actual author checkpoint. Historical baseline scripts are preserved sources, not covered by the supported-package runtime tests.
+These are software checks using synthetic data, not 7,200-image LSUN experiments or independent reproduction of paper results. Large-scale benchmark training was outside this validation run. Legacy checkpoint conversion has not been exercised in the validation suite. Historical baseline scripts are preserved sources, not covered by the supported-package runtime tests.

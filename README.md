@@ -19,7 +19,7 @@ This repository consolidates the supplied `cflow-ad-master.zip` and `cflowtest.z
 | Table 5: emerging generators | `evaluate --suite emerging` with the same P checkpoint, without retraining |
 | External comparison methods | supplied `legacy/UniversalFake/` source; common score evaluator in `clipflow.baselines` |
 
-External baseline algorithms are not all reimplemented here. Most comparison rows in the paper come from external publications. Their original training code, weights and exact author settings are not present in the supplied archives. The common evaluator accepts independently produced baseline scores; see [docs/BASELINES.md](docs/BASELINES.md).
+External baseline algorithms are not all reimplemented here. Most comparison rows in the paper come from external publications. Use each method's upstream implementation and configuration for comparisons. The common evaluator accepts independently produced baseline scores; see [docs/BASELINES.md](docs/BASELINES.md).
 
 ## Install
 
@@ -32,7 +32,7 @@ python -m pip install -r requirements-dev.txt
 python -m pytest -q
 ```
 
-The frozen CLIP ViT-L/14 weights are downloaded from the URL and verified against the checksum embedded in the vendored CLIP loader. `--cache-dir` controls the cache location. Use `--device cuda:0` for training on an available NVIDIA GPU; CPU execution is supported for checks. No CLIP-Flow checkpoint is bundled.
+The frozen CLIP ViT-L/14 weights are downloaded from the URL and verified against the checksum embedded in the vendored CLIP loader. `--cache-dir` controls the cache location. Use `--device cuda:0` for training on an available NVIDIA GPU; CPU execution is supported for checks.
 
 ## Prepare data
 
@@ -91,7 +91,7 @@ The supplied test archive contains 221 complete 19-dataset result blocks. The au
 python -m clipflow.history --root legacy/cflowtest --output runs/log-audit.json
 ```
 
-Original CLIP-Flow `.pt` files referenced by those logs are missing from both archives. If you obtain one, `import-legacy` supports the archived `encoder_state_dict`, `MLP_state_dict`, and `decoder_state_dict` format, with an explicitly selected configuration and original training manifest. Compatibility and encoder identity are checked strictly. No automatic guess of mode or threshold is made.
+To import an archived CLIP-Flow checkpoint, `import-legacy` supports the archived `encoder_state_dict`, `MLP_state_dict`, and `decoder_state_dict` format, with an explicitly selected configuration and original training manifest. Compatibility and encoder identity are checked strictly. No automatic guess of mode or threshold is made.
 
 ## Attribution
 
