@@ -1,0 +1,174 @@
+{
+  "source_archive": "cflow-ad-master.zip",
+  "selection": "Original active CLIP-based training path and supporting modules; source files preserved byte-for-byte.",
+  "files": [
+    {
+      "path": "config.py",
+      "archive_path": "cflow-ad-master/config.py",
+      "bytes": 3273,
+      "sha256": "f800535b53f920d95afdc0c093d40d2f49e17a8287dd1232a6c38283e967fe70"
+    },
+    {
+      "path": "custom_datasets/__init__.py",
+      "archive_path": "cflow-ad-master/custom_datasets/__init__.py",
+      "bytes": 34,
+      "sha256": "f4ed5945705e0f8c536b03025f7a3d743755bd1372f2c025402b4fad4b6b48dc"
+    },
+    {
+      "path": "custom_datasets/loader1.py",
+      "archive_path": "cflow-ad-master/custom_datasets/loader1.py",
+      "bytes": 23631,
+      "sha256": "045c2acf567e280e78401b40ef520cd0dc77ee1b236cf5870ce885e48266c441"
+    },
+    {
+      "path": "custom_models/__init__.py",
+      "archive_path": "cflow-ad-master/custom_models/__init__.py",
+      "bytes": 115,
+      "sha256": "9e9b37a701c4e4999a5a9c40a645de52b8510671857707d89253a8db8b2b8bb5"
+    },
+    {
+      "path": "custom_models/mobilenetv3.py",
+      "archive_path": "cflow-ad-master/custom_models/mobilenetv3.py",
+      "bytes": 12000,
+      "sha256": "b87781aa5721ceb90a1f88e0a8f9a0a00d0b299d25ebe0c0c3033390eca0f1f5"
+    },
+    {
+      "path": "custom_models/resnet.py",
+      "archive_path": "cflow-ad-master/custom_models/resnet.py",
+      "bytes": 15497,
+      "sha256": "6b9e471976f54efd52393f37393822c8be80e6135e37580319369892def48f1c"
+    },
+    {
+      "path": "custom_models/utils.py",
+      "archive_path": "cflow-ad-master/custom_models/utils.py",
+      "bytes": 2894,
+      "sha256": "a6b3579c9b969224c227e48fda58eead26469074fd5e5d49453f569fb672fa7a"
+    },
+    {
+      "path": "LICENSE",
+      "archive_path": "cflow-ad-master/LICENSE",
+      "bytes": 1566,
+      "sha256": "35b5ca2162862c82e9f8f9fcca2418153c47d8f4a99040e52b19a43a2114f6fd"
+    },
+    {
+      "path": "main.py",
+      "archive_path": "cflow-ad-master/main.py",
+      "bytes": 3634,
+      "sha256": "b07a6b1b56bc2b1766a027e086ce584377579dd43069464d7688d4ebb18d210d"
+    },
+    {
+      "path": "model.py",
+      "archive_path": "cflow-ad-master/model.py",
+      "bytes": 7914,
+      "sha256": "5cb021ef2f63afce35ce84e21a37b5c9558073e0b0b583380c32b057d5a0db45"
+    },
+    {
+      "path": "models/__init__.py",
+      "archive_path": "cflow-ad-master/models/__init__.py",
+      "bytes": 869,
+      "sha256": "7ea7f9931cfb773d552e30d2333a83c416798a2862119373356c7d03fb552299"
+    },
+    {
+      "path": "models/clip/__init__.py",
+      "archive_path": "cflow-ad-master/models/clip/__init__.py",
+      "bytes": 20,
+      "sha256": "d7930eb290ebed432116795c91473200d098451a94c0aedd4ae0f934f97955e8"
+    },
+    {
+      "path": "models/clip/bpe_simple_vocab_16e6.txt.gz",
+      "archive_path": "cflow-ad-master/models/clip/bpe_simple_vocab_16e6.txt.gz",
+      "bytes": 1356917,
+      "sha256": "924691ac288e54409236115652ad4aa250f48203de50a9e4722a6ecd48d6804a"
+    },
+    {
+      "path": "models/clip/clip.py",
+      "archive_path": "cflow-ad-master/models/clip/clip.py",
+      "bytes": 9395,
+      "sha256": "ec378c64cee0255d5a90ec83a74ce7acd00a01e608716ab3e69b211400ca3c6b"
+    },
+    {
+      "path": "models/clip/model.py",
+      "archive_path": "cflow-ad-master/models/clip/model.py",
+      "bytes": 17845,
+      "sha256": "c071d011e92226f1ca0a6f7c5098d8d7d08eadc7d6db125a81b52fc234b1ec59"
+    },
+    {
+      "path": "models/clip/simple_tokenizer.py",
+      "archive_path": "cflow-ad-master/models/clip/simple_tokenizer.py",
+      "bytes": 4632,
+      "sha256": "d1b09f10ed3d1e2c343619cb98cbfacb92363dd8607526a43aa7fe2d60d15bad"
+    },
+    {
+      "path": "models/clip_models.py",
+      "archive_path": "cflow-ad-master/models/clip_models.py",
+      "bytes": 643,
+      "sha256": "57ce5898bf0bc7ff52b5922a0aefae8bc34a9237e4d59e4a1615ff5d8c6ff7a6"
+    },
+    {
+      "path": "models/imagenet_models.py",
+      "archive_path": "cflow-ad-master/models/imagenet_models.py",
+      "bytes": 942,
+      "sha256": "f291a0179027a8efc0e59b62edb9eecfe7a28add8312e5929a81dfb46e3096e0"
+    },
+    {
+      "path": "models/resnet.py",
+      "archive_path": "cflow-ad-master/models/resnet.py",
+      "bytes": 12741,
+      "sha256": "c2e13589767e3da0af9f5037dfb6933bcd5bddffef4d50c81d80f8a22a49a263"
+    },
+    {
+      "path": "models/vgg.py",
+      "archive_path": "cflow-ad-master/models/vgg.py",
+      "bytes": 3423,
+      "sha256": "6f18422a66cc1fb52d7388d3f94b6a8cb52df802b7855d1ac1bcabfa1c807ed2"
+    },
+    {
+      "path": "models/vision_transformer.py",
+      "archive_path": "cflow-ad-master/models/vision_transformer.py",
+      "bytes": 17416,
+      "sha256": "f1fd9e3023a0cf246e99bec02096a30228c72ae79e70e1346234468bc8f415f3"
+    },
+    {
+      "path": "models/vision_transformer_misc.py",
+      "archive_path": "cflow-ad-master/models/vision_transformer_misc.py",
+      "bytes": 6556,
+      "sha256": "d25390fc38a08ec0b005d76eeeb122a89a9c3eb296d8fb2b1da3f73745e1e715"
+    },
+    {
+      "path": "models/vision_transformer_utils.py",
+      "archive_path": "cflow-ad-master/models/vision_transformer_utils.py",
+      "bytes": 21551,
+      "sha256": "25be7a4a7a74a58e47ab4c32770b8334f1b000c9b4cd15fd0eb55e2faee68bcc"
+    },
+    {
+      "path": "requirements.txt",
+      "archive_path": "cflow-ad-master/requirements.txt",
+      "bytes": 98,
+      "sha256": "16abef661ff0a070bec9e0d46d75d01c25c5c0fe6937dd453e6371879ebd5829"
+    },
+    {
+      "path": "resnet.py",
+      "archive_path": "cflow-ad-master/resnet.py",
+      "bytes": 7295,
+      "sha256": "d9d0595ef78ff2d82b755d7c2a298cf9ece514c8e07e297c47480f66c08e1ff1"
+    },
+    {
+      "path": "train_vit_512.py",
+      "archive_path": "cflow-ad-master/train_vit_512.py",
+      "bytes": 14229,
+      "sha256": "e2c34fbfccf62539957b6f1faba3d6fa9aa446d2bfe2f3d84a77f344ab6def33"
+    },
+    {
+      "path": "utils.py",
+      "archive_path": "cflow-ad-master/utils.py",
+      "bytes": 1183,
+      "sha256": "d244a6095fd32e163b3c47a7091dd8d596188a7208396eee5033511b80914650"
+    },
+    {
+      "path": "visualize.py",
+      "archive_path": "cflow-ad-master/visualize.py",
+      "bytes": 6491,
+      "sha256": "0d41cf347e691c829a8004935171d54091a06857cd42876ca3962b79904fdd20"
+    }
+  ]
+}
