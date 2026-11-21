@@ -16,6 +16,10 @@ A frozen CLIP encoder extracts image features, which are reduced in dimension, L
 
 At inference, the model uses negative log-likelihood as an anomaly score: larger values indicate a stronger prediction of an AI-generated image. The proxy-only (P) and joint (N+P) modes provide two ways to learn this distinction without training on outputs from a specific image generator.
 
+![CLIP-Flow framework](assets/framework.png)
+
+*Figure 2. CLIP-Flow framework: natural images and frequency-masked proxy images share the feature encoder and flow model, with complementary likelihood objectives.*
+
 `main.py` runs the main experiment from training through validation-threshold calibration to evaluation on 19 test datasets. Separate entry points cover the ablation experiments.
 
 ## Experiment coverage
