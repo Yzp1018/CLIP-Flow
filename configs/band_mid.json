@@ -1,0 +1,28 @@
+{
+  "mode": "NP",
+  "proxy": "frequency",
+  "band": "mid",
+  "ratio": 0.1,
+  "dimension": 128,
+  "normalize": true,
+  "epochs": 10,
+  "batch_size": 128,
+  "lr": 0.0001,
+  "coupling_blocks": 1,
+  "clamp": 1.9,
+  "resize": 256,
+  "crop": 224,
+  "seed": 1000,
+  "workers": 0,
+  "noise_std": 5.0,
+  "blur_radius": 1.0,
+  "sharpen_radius": 5.0,
+  "sharpen_percent": 300,
+  "jitter": [
+    0.5,
+    0.5,
+    0.5,
+    0.1
+  ],
+  "uint8_policy": "wrap"
+}

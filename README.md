@@ -1,66 +1,97 @@
 # CLIP-Flow
 
-Source code associated with **CLIP-Flow: A Universal Discriminator for AI-Generated Images Inspired by Anomaly Detection**, by Zhipeng Yuan, Kai Wang, Weize Quan, Dong-Ming Yan, and Tieru Wu (DFF 2025).
+Experiments for **CLIP-Flow: A Universal Discriminator for AI-Generated Images Inspired by Anomaly Detection** — Zhipeng Yuan, Kai Wang, Weize Quan, Dong-Ming Yan, and Tieru Wu, DFF 2025.
 
-- [Paper](https://arxiv.org/abs/2508.09477)
-- [Published version](https://doi.org/10.1145/3746265.3759663)
-- [Repository named in the paper](https://github.com/Yzp1018/CLIP-Flow)
+[Paper](https://arxiv.org/abs/2508.09477) · [Published version](https://doi.org/10.1145/3746265.3759663) · [Provenance and reproduction limits](docs/REPRODUCTION.md)
 
-## Release status
+This repository consolidates the supplied `cflow-ad-master.zip` and `cflowtest.zip`. Original experiment sources and logs are retained under `legacy/`. The supported `clipflow/` package is a reconstructed, configurable implementation; it is not a recovered copy of the exact final training revision. Tests establish software behavior, not reproduction of the reported benchmark numbers.
 
-This is a selected **research source snapshot** from the author-provided `cflow-ad-master.zip`. The original Python files are preserved without algorithm changes. This snapshot has not been validated as the final configuration that produced the paper's reported results. In particular, the active data loader currently uses a color-jitter proxy rather than the paper's frequency-masking proxy; see the limitations below.
+## Experiment coverage
 
-No trained CLIP-Flow checkpoint or dataset is included. The large `UniversalFake` baseline checkpoints in the archive are excluded because their correspondence to the CLIP-Flow model has not been established.
-
-## Code and method correspondence
-
-| Component | Source |
+| Paper experiment | Configuration / command |
 | --- | --- |
-| Entry point and configuration | `main.py`, `config.py` |
-| Frozen CLIP ViT-L/14 image features | `train_vit_512.py` |
-| Linear dimension reduction, 768 to 128 dimensions, followed by L2 normalization | `train_vit_512.py` |
-| Normalizing flow built with FrEIA | `model.py` |
-| Natural/proxy likelihood objective | `train_vit_512.py`, `utils.py` |
-| Data loading and proxy construction | `custom_datasets/loader1.py` |
-| Vendored CLIP implementation and tokenizer vocabulary | `models/clip/` |
-| Supporting encoders, utilities and visualization | `custom_models/`, `models/`, `resnet.py`, `utils.py`, `visualize.py` |
+| Tables 1–2: natural-only, proxy-only, joint training | `configs/N.json`, `P.json`, `NP.json`; 19-dataset evaluation |
+| Figure 3: score histograms | `python -m clipflow.figures histograms` |
+| Table 3: proxy comparison | `proxy_smooth`, `proxy_sharpen`, `proxy_noise`, `proxy_jitter`, `proxy_phase`, `NP` |
+| Table 4: frequency-region comparison | `NP`, `band_mid`, `band_high` |
+| Figure 4: dimension reduction | 2, 4, 8, 16, 32, 64, 128, 256, 512, 768 dimensions and `no_dr` |
+| Feature normalization ablation | `NP`, `no_normalization` |
+| Table 5: emerging generators | `evaluate --suite emerging` with the same P checkpoint, without retraining |
+| External comparison methods | supplied `legacy/UniversalFake/` source; common score evaluator in `clipflow.baselines` |
 
-The active path is `main.py` -> `train_vit_512.py` -> `custom_datasets/loader1.py`. Some inherited encoder modules remain because they are imported by the original package initializers.
+External baseline algorithms are not all reimplemented here. Most comparison rows in the paper come from external publications. Their original training code, weights and exact author settings are not present in the supplied archives. The common evaluator accepts independently produced baseline scores; see [docs/BASELINES.md](docs/BASELINES.md).
 
-## Environment and use
+## Install
 
-The archive's original dependency list is retained in `requirements.txt`; it is not a tested environment lockfile. The selected source also imports FrEIA, OpenCV (`cv2`), Pillow, `ftfy`, `regex`, and `pkg_resources`/`packaging`. The vendored CLIP implementation relies on older `pkg_resources` behavior, so dependency compatibility must be checked before running it. No dependency installation or GPU training was performed for this upload.
+Python 3.9 or newer is required. Use a compatible torch/torchvision pair for your hardware.
 
-The inherited CFLOW-AD setup notes are preserved in [docs/CFLOW_AD_README.md](docs/CFLOW_AD_README.md) for provenance. Their MVTec commands, results and figures describe the upstream project, not a CLIP-Flow reproduction recipe.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
 
-Before using this snapshot:
+The frozen CLIP ViT-L/14 weights are downloaded from the URL and verified against the checksum embedded in the vendored CLIP loader. `--cache-dir` controls the cache location. Use `--device cuda:0` for training on an available NVIDIA GPU; CPU execution is supported for checks. No CLIP-Flow checkpoint is bundled.
 
-1. Install a compatible PyTorch/torchvision environment and the dependencies above. FrEIA is available at https://github.com/vislearn/FrEIA.
-2. Replace the original server data/cache paths in `main.py` and `custom_datasets/loader1.py` with local paths. The loader currently reads real training images from `ProGAN/train/0_real` and test images from `ProGAN/test/good` and `ProGAN/test/bad`.
-3. Review the CUDA device selection in `main.py` and `config.py` for the available hardware.
-4. Resolve and validate the proxy configuration described below before attempting to reproduce paper results. Use `norm-train` for training or `norm-test` with a compatible checkpoint for evaluation; these are existing configuration options, not verified reproduction commands.
+## Prepare data
 
-## Known limitations in the supplied snapshot
+Use a directory containing only natural training-source images. The split command records a **new** deterministic split; exact original paper membership was not supplied. You can instead provide original training and validation manifests as JSON lists of paths. Relative paths are resolved against each manifest's directory.
 
-- In `custom_datasets/loader1.py`, the frequency-masking path is behind `if random.random() < 0`, so it is never executed. The active proxy branch uses `ColorJitter`. The dormant frequency path also needs its image-to-tensor transform reviewed before enabling it.
-- The training loader duplicates a subsampled set of real images with labels 0 and 1. The active loss maximizes natural-image likelihood and minimizes proxy-image likelihood. A separate, verified proxy-only (P) training configuration is not supplied here.
-- Data paths, an image-loading fallback path, cache settings and a CUDA device are specific to the original server. The `stc` option is inherited but its dataset class is not exported by the selected package initializer.
-- Evaluation selects an accuracy threshold from the evaluated labels. That accuracy should not be treated as performance at an independently calibrated deployment threshold.
-- Model weights, exact package versions, the full benchmark setup and full paper-result reproduction have not been verified.
+```bash
+python -m clipflow split --real-root data/lsun_real --output data/splits
+```
 
-## Provenance and attribution
+Default manifests contain 7,200 training images and 1,000 disjoint validation natural images. The validation count is a reconstruction choice. Never include benchmark test images in either split. The CLI enforces 7,200 training images unless `--allow-other-count` explicitly marks a non-paper run.
 
-The selected archive files and their SHA-256 checksums are listed in [docs/SOURCE_MANIFEST.json](docs/SOURCE_MANIFEST.json). Source selection excludes `UniversalFake/`, unrelated training/export variants, generated plots, logs and large checkpoint files. The original archive remains the reference for those materials.
+The benchmark root contains the 19 names listed in `clipflow/settings.py`. Each dataset can use `test/good`, `test/bad`, `test/0_real`, `test/1_fake`, or class-nested `0_real`/`1_fake` directories. An optional `--mapping` JSON object maps canonical names to local folders. Emerging-model folders are `dalle3`, `deepfloyd`, `realvisxl_v4`, and `sd15`, each with 1,000 real and 1,000 fake images. Dataset creation prompts, generator settings and images were not supplied.
 
-The code builds on [CFLOW-AD](https://github.com/gudovskiy/cflow-ad), [OpenAI CLIP](https://github.com/openai/CLIP), and [UniversalFakeDetect](https://github.com/Yuheng-Li/UniversalFakeDetect). The original BSD 3-Clause notice is retained in [LICENSE](LICENSE); the CLIP MIT notice is included in [models/clip/LICENSE](models/clip/LICENSE). Existing source notices are preserved.
+## Train, calibrate, evaluate
 
-## Citation
+```bash
+python -m clipflow train --config configs/NP.json --train-manifest data/splits/train.json --output runs/NP --device cuda:0
+python -m clipflow calibrate --checkpoint runs/NP/last.pt --validation-manifest data/splits/validation.json --output runs/NP/calibration.json --device cuda:0
+python -m clipflow evaluate --checkpoint runs/NP/last.pt --calibration runs/NP/calibration.json --test-root data/benchmark --output runs/NP/benchmark --device cuda:0
+```
+
+Accuracy uses one threshold selected exclusively from held-out validation natural images and frequency-perturbed copies. Test labels never choose the threshold. Omitting `--calibration` produces AP-only evaluation. Missing datasets cause an error; `--datasets progan` is available for explicit subset checks and is marked as an incomplete suite. Checkpoints contain settings, membership metadata and learned projection/flow weights. Training refuses to overwrite an existing `last.pt`.
+
+## Run all experiment families
+
+First print and review the complete command plan:
+
+```bash
+python -m clipflow.experiments --groups all --train-manifest data/splits/train.json --validation-manifest data/splits/validation.json --test-root data/benchmark --emerging-root data/emerging --output runs/paper --device cuda:0
+```
+
+Add `--execute` to run it in a fresh output directory. Shared configurations are trained once. Table 5 evaluates `runs/paper/P/last.pt`, without extra training. Individual groups are `main`, `proxies`, `bands`, `dimensions`, `normalization`, and `emerging`.
+
+```bash
+python -m clipflow.figures histograms --p-results runs/paper/P/benchmark --np-results runs/paper/NP/benchmark --output runs/paper/figure3.png
+python -m clipflow.figures dimensions --root runs/paper --output runs/paper/figure4.png
+```
+
+New runs write `training.json`, calibrated-threshold metadata, `metrics.json`, and per-dataset score arrays. Plots read those new-run artifacts. Archived numbers are never substituted for predictions.
+
+## Historical evidence and checkpoints
+
+The supplied test archive contains 221 complete 19-dataset result blocks. The audit finds AP vectors matching the paper's P and N+P main rows and mid/high frequency rows at all 19 displayed values. This is evidence of matching recorded results, not an independently executed reproduction. See [docs/LOG_AUDIT.json](docs/LOG_AUDIT.json).
+
+```bash
+python -m clipflow.history --root legacy/cflowtest --output runs/log-audit.json
+```
+
+Original CLIP-Flow `.pt` files referenced by those logs are missing from both archives. If you obtain one, `import-legacy` supports the archived `encoder_state_dict`, `MLP_state_dict`, and `decoder_state_dict` format, with an explicitly selected configuration and original training manifest. Compatibility and encoder identity are checked strictly. No automatic guess of mode or threshold is made.
+
+## Attribution
+
+This work builds on [CFLOW-AD](https://github.com/gudovskiy/cflow-ad), [OpenAI CLIP](https://github.com/openai/CLIP), [FrEIA](https://github.com/vislearn/FrEIA), and [UniversalFakeDetect](https://github.com/Yuheng-Li/UniversalFakeDetect). The archive's BSD notice remains in `LICENSE`; CLIP's MIT notice is in `models/clip/LICENSE`. Unmodified historical source hashes are recorded in `docs/ARCHIVE_MANIFEST.json`.
 
 ```bibtex
 @inproceedings{yuan2025clipflow,
   title={CLIP-Flow: A Universal Discriminator for AI-Generated Images Inspired by Anomaly Detection},
   author={Yuan, Zhipeng and Wang, Kai and Quan, Weize and Yan, Dong-Ming and Wu, Tieru},
-  booktitle={Proceedings of the 1st on Deepfake Forensics Workshop: Detection, Attribution, Recognition, and Adversarial Challenges in the Era of AI-Generated Media},
+  booktitle={Proceedings of the 1st on Deepfake Forensics Workshop},
   year={2025},
   doi={10.1145/3746265.3759663}
 }

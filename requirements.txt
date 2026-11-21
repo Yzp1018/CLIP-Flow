@@ -1,10 +1,11 @@
-numpy
-scipy
-scikit-learn
-matplotlib
+torch>=2.2,<2.9
+torchvision>=0.17,<0.24
+FrEIA==0.2
+numpy>=1.26,<3
+Pillow>=10,<12
+scikit-learn>=1.4,<1.7
+matplotlib>=3.8,<3.10
+ftfy>=6,<7
+regex
+packaging>=23
 tqdm
-scikit-image
-av
-timm
-torch >= 1.6.0
-torchvision >= 0.7.0
