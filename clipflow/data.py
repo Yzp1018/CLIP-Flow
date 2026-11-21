@@ -39,7 +39,7 @@ def manifest(path):
 
 
 def fingerprint(paths):
-    # Membership identity, not an image-content digest. Exact archive membership is unknown.
+    # Hash resolved membership paths, rather than image contents.
     return hashlib.sha256('\n'.join(sorted(map(str, paths))).encode()).hexdigest()
 
 

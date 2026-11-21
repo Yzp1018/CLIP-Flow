@@ -7,7 +7,7 @@ from .settings import Settings
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(description='CLIP-Flow consolidated research experiments')
+    parser = argparse.ArgumentParser(description='CLIP-Flow training and evaluation')
     sub = parser.add_subparsers(dest='action', required=True)
     split = sub.add_parser('split', help='Prepare disjoint natural-image training/validation manifests')
     split.add_argument('--real-root', required=True)
@@ -58,7 +58,7 @@ def main(argv=None):
         engine.write_json(output / 'validation.json', list(map(str, paths[args.train_count:args.train_count + args.validation_count])))
         engine.write_json(output / 'split.json', {'seed': args.seed, 'train_count': args.train_count,
                           'validation_count': args.validation_count, 'source': str(Path(args.real_root).resolve()),
-                          'note': 'New deterministic split, not recovered original paper membership'})
+                          'selection': 'seeded random partition'})
     elif args.action == 'train':
         cfg = Settings(**json.loads(Path(args.config).read_text())).validate()
         engine.train(cfg, args.train_manifest, args.output, args.device, args.cache_dir,

@@ -70,7 +70,7 @@ def save_checkpoint(path, model, cfg, train_paths, epochs):
 def load_checkpoint(path, device='auto', cache_dir=None, encoder=None):
     checkpoint = torch.load(path, map_location='cpu', weights_only=True)
     if checkpoint.get('format') != 'clipflow-consolidated-v1':
-        raise ValueError('Legacy checkpoint: use import-legacy with explicit settings and training manifest first')
+        raise ValueError('Unsupported checkpoint format: use import-legacy with explicit settings and training manifest first')
     cfg = Settings(**checkpoint['settings']).validate()
     model = CLIPFlow(cfg, encoder=encoder, cache_dir=cache_dir)
     model.projection.load_state_dict(checkpoint['projection'], strict=True)
@@ -185,12 +185,12 @@ def evaluate(checkpoint_path, root, output, calibration=None, suite='benchmark',
 
 
 def import_legacy(source, cfg, train_manifest, output, device='cpu', cache_dir=None):
-    """Strict adapter for archived encoder/MLP/decoder checkpoint keys."""
+    """Adapter for encoder/MLP/decoder checkpoint dictionaries."""
     cfg.validate()
     old = torch.load(source, map_location='cpu', weights_only=True)
     required = {'encoder_state_dict', 'MLP_state_dict', 'decoder_state_dict'}
     if not required.issubset(old):
-        raise ValueError('Not an archived CLIP-Flow checkpoint; UniversalFake baseline weights are incompatible')
+        raise ValueError('Expected CLIP-Flow encoder, projection and decoder state dictionaries')
     model = CLIPFlow(cfg, cache_dir=cache_dir).to(select_device(device))
     model.encoder.load_state_dict(old['encoder_state_dict'], strict=True)
     # A converted compact checkpoint relies on the official frozen CLIP weights.

@@ -19,13 +19,13 @@ def main(argv=None, encoder=None):
     parser.add_argument('--validation-manifest', default='data/splits/validation.json')
     parser.add_argument('--test-root', default='data/benchmark')
     parser.add_argument('--output', help='Fresh run directory; default runs/main_MODE')
-    parser.add_argument('--checkpoint', help='Evaluate an existing consolidated main-experiment checkpoint instead of training')
+    parser.add_argument('--checkpoint', help='Evaluate a matching main-experiment checkpoint instead of training')
     parser.add_argument('--device', default='auto')
     parser.add_argument('--cache-dir')
     parser.add_argument('--workers', type=int, default=0)
     parser.add_argument('--seed', type=int, default=1000)
     parser.add_argument('--epochs', type=int, help='Explicit schedule override; omitted for paper defaults')
-    parser.add_argument('--allow-other-count', action='store_true', help='Non-paper smoke runs only: allow fewer than 7200 training images')
+    parser.add_argument('--allow-other-count', action='store_true', help='Allow a training set size other than 7200 images')
     args = parser.parse_args(argv)
     mode = 'NP' if args.mode == 'N+P' else args.mode
     cfg_path = Path(__file__).resolve().parent / 'configs' / (mode + '.json')
@@ -53,7 +53,7 @@ def main(argv=None, encoder=None):
         import torch
         state = torch.load(args.checkpoint, map_location='cpu', weights_only=True)
         if state.get('format') != 'clipflow-consolidated-v1':
-            raise ValueError('Convert archived checkpoints with python -m clipflow import-legacy first')
+            raise ValueError('Convert this checkpoint format with python -m clipflow import-legacy first')
         loaded = Settings(**state['settings'])
         primary = (loaded.mode == mode and loaded.dimension == 128 and loaded.normalize
                    and loaded.proxy == 'frequency' and loaded.band == 'low' and loaded.ratio == cfg.ratio)

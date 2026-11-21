@@ -6,7 +6,7 @@
 
 作者：Zhipeng Yuan、Kai Wang、Weize Quan、Dong-Ming Yan、Tieru Wu。发表于 DFF 2025。
 
-[论文预印本](https://arxiv.org/abs/2508.09477) · [正式发表版本](https://doi.org/10.1145/3746265.3759663) · [实现说明](docs/REPRODUCTION.md)
+[论文预印本](https://arxiv.org/abs/2508.09477) · [正式发表版本](https://doi.org/10.1145/3746265.3759663) · [实现说明](docs/IMPLEMENTATION.md)
 
 `main.py` 提供论文主实验的完整流程：训练、独立验证集阈值校准，以及 19 个测试集的评估。代理图像、频域掩码、特征降维和归一化等消融实验通过独立入口运行。
 
@@ -16,11 +16,11 @@ CLIP-Flow 使用冻结的 CLIP ViT-L/14 提取图像特征，经线性降维与 
 
 | 模式 | 训练目标 | 默认设置 |
 | --- | --- | --- |
-| `N` | 最大化自然图像的似然 | 仅使用自然图像，当前实现默认训练 10 轮 |
+| `N` | 最大化自然图像的似然 | 仅使用自然图像，默认训练 10 轮 |
 | `P` | 最小化代理图像的似然 | 低频掩码比例 1.0，训练 30 轮 |
 | `NP` / `N+P` | 同时最大化自然图像、最小化代理图像的似然 | 低频掩码比例 0.1，训练 10 轮 |
 
-默认采用 N+P 模式，特征由 768 维降至 128 维，使用 Adam 优化器，学习率为 `1e-4`，批大小为 128。N 模式的训练轮数属于当前实现的默认设置，参数来源见复现说明。
+默认采用 N+P 模式，特征由 768 维降至 128 维，使用 Adam 优化器，学习率为 `1e-4`，批大小为 128。各项设置可通过配置文件调整，详见实现说明。
 
 ## 环境安装
 
@@ -49,7 +49,7 @@ CLIP ViT-L/14 预训练参数由加载器自动下载并校验。可以通过 `-
 python -m clipflow split --real-root data/lsun_real --output data/splits
 ```
 
-默认选取 7,200 张自然图像用于训练、1,000 张互不重叠的自然图像用于验证。验证图像数量是当前实现的设置。此命令生成新的固定随机划分；如需使用已有实验划分，可以直接提供 JSON 清单。
+默认选取 7,200 张自然图像用于训练、1,000 张互不重叠的自然图像用于验证。验证图像数量可通过 `--validation-count` 调整。此命令生成新的固定随机划分；如需使用已有实验划分，可以直接提供 JSON 清单。
 
 清单为图像路径组成的 JSON 数组。支持绝对路径；相对路径以清单所在目录为基准。例如 `data/splits/train.json` 中的路径可以写成：
 
@@ -170,7 +170,7 @@ python -m clipflow.figures histograms --p-results runs/paper/P/benchmark --np-re
 python -m clipflow.figures dimensions --root runs/paper --output runs/paper/figure4.png
 ```
 
-外部对比方法使用各自的上游实现与配置。UniversalFake 基线代码位于 `legacy/UniversalFake/`；统一分数评估接口见 [外部基线评估说明](docs/BASELINES.md)。
+外部对比方法使用各自的上游实现与配置，统一分数评估接口见 [外部基线评估说明](docs/BASELINES.md)。
 
 ## 输出与目录说明
 
@@ -179,9 +179,8 @@ python -m clipflow.figures dimensions --root runs/paper --output runs/paper/figu
 | `main.py` | 主实验的一键入口 |
 | `clipflow/` | 数据处理、代理图像、模型、训练、校准、评估与绘图 |
 | `configs/` | 主实验及消融配置 |
-| `legacy/` | 参考代码与实验记录 |
 | `tests/` | 功能与流程测试 |
-| `docs/` | 实现、评估与验证说明 |
+| `docs/` | 实现细节、评估方法与测试说明 |
 | `runs/<实验名>/last.pt` | 训练生成的模型检查点 |
 | `runs/<实验名>/training.json` | 实验设置、训练记录和参数量 |
 | `runs/<实验名>/calibration.json` | 验证集阈值及对应模型信息 |
@@ -190,7 +189,7 @@ python -m clipflow.figures dimensions --root runs/paper --output runs/paper/figu
 
 绘图直接使用当前运行保存的图像标签与异常分数。
 
-软件验证覆盖训练目标、代理图像、阈值校准、检查点读写，以及 `main.py` 的完整小样本流程。测试通过不等同于独立复现论文的大规模实验，具体记录见 [VALIDATION.md](docs/VALIDATION.md)。
+软件测试覆盖训练目标、代理图像、阈值校准、检查点读写，以及 `main.py` 的完整流程。运行方法和测试范围见 [测试说明](docs/TESTING.md)。
 
 ## 致谢与引用
 

@@ -1,6 +1,6 @@
 # External-method comparison
 
-The archives include UniversalFake source. Use the original implementations and configurations for the other comparison methods.
+Use each comparison method’s upstream implementation and configuration, then export its anomaly scores for evaluation with the common interface below.
 
 Use upstream implementations for PaDiM, CFA, GANomaly, DSR, DRAEM, STFPM, RD, DFM, FastFlow, CFlow, CNNSpot, PatchForensics, Co-Occur, FreqSpec, DIRE, UnivFD, Freq-mask and OnlyReal. See [original references](https://arxiv.org/html/2508.09477v1#S4.SS2). Some published rows were taken from earlier papers. Fresh comparisons must record upstream revision, manifests, weights, preprocessing and score orientation.
 

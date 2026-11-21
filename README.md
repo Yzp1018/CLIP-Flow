@@ -4,7 +4,7 @@ English | [简体中文](README_zh-CN.md)
 
 Experiments for **CLIP-Flow: A Universal Discriminator for AI-Generated Images Inspired by Anomaly Detection** — Zhipeng Yuan, Kai Wang, Weize Quan, Dong-Ming Yan, and Tieru Wu, DFF 2025.
 
-[Paper](https://arxiv.org/abs/2508.09477) · [Published version](https://doi.org/10.1145/3746265.3759663) · [Implementation notes](docs/REPRODUCTION.md)
+[Paper](https://arxiv.org/abs/2508.09477) · [Published version](https://doi.org/10.1145/3746265.3759663) · [Implementation details](docs/IMPLEMENTATION.md)
 
 CLIP-Flow detects AI-generated images using frozen CLIP features, dimension reduction and normalizing flows. `main.py` runs the main experiment from training through validation-threshold calibration to evaluation on 19 test datasets. Separate entry points cover the ablation experiments.
 
@@ -19,9 +19,9 @@ CLIP-Flow detects AI-generated images using frozen CLIP features, dimension redu
 | Figure 4: dimension reduction | 2, 4, 8, 16, 32, 64, 128, 256, 512, 768 dimensions and `no_dr` |
 | Feature normalization ablation | `NP`, `no_normalization` |
 | Table 5: emerging generators | `evaluate --suite emerging` with the same P checkpoint, without retraining |
-| External comparison methods | `legacy/UniversalFake/` baseline source; common score evaluator in `clipflow.baselines` |
+| External comparison methods | Common score evaluator in `clipflow.baselines` |
 
-External baseline algorithms are not all reimplemented here. Most comparison rows in the paper come from external publications. Use each method's upstream implementation and configuration for comparisons. The common evaluator accepts independently produced baseline scores; see [docs/BASELINES.md](docs/BASELINES.md).
+For comparisons with external methods, use their upstream implementations and configurations. The common evaluator accepts independently produced scores; see [baseline evaluation](docs/BASELINES.md).
 
 ## Install
 
@@ -56,7 +56,7 @@ The benchmark root contains the 19 names listed in `clipflow/settings.py`. Each 
 python main.py --train-manifest data/splits/train.json --validation-manifest data/splits/validation.json --test-root data/benchmark --output runs/main_NP --device cuda:0
 ```
 
-The default N+P schedule is 10 epochs with low-frequency masking ratio 0.1. P uses 30 epochs and ratio 1.0. Training/validation manifests and every benchmark folder are checked before training. `--checkpoint` skips training only for an existing consolidated checkpoint matching the selected main configuration. With data in the default locations, `python main.py --device cuda:0` is sufficient.
+The default N+P schedule is 10 epochs with low-frequency masking ratio 0.1. P uses 30 epochs and ratio 1.0. Training/validation manifests and every benchmark folder are checked before training. `--checkpoint` skips training only for an existing checkpoint matching the selected main configuration. With data in the default locations, `python main.py --device cuda:0` is sufficient.
 
 The equivalent individual stages remain available for checkpoint management and ablations:
 
@@ -88,6 +88,10 @@ New runs write `training.json`, calibrated-threshold metadata, `metrics.json`, a
 ## Checkpoint import
 
 `import-legacy` supports checkpoints containing `encoder_state_dict`, `MLP_state_dict`, and `decoder_state_dict`. Specify the corresponding configuration and training manifest; model compatibility and encoder identity are checked strictly.
+
+## Tests
+
+Run `python -m pytest -q` to check model components, transforms and the training/evaluation workflow. See [test coverage](docs/TESTING.md) for details.
 
 ## Attribution
 

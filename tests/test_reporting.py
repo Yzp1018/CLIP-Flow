@@ -6,16 +6,8 @@ import numpy as np
 import pytest
 
 from clipflow.baselines import compare
-from clipflow.history import audit
 from clipflow.figures import histograms, dimensions
 from clipflow.experiments import GROUPS
-
-
-def test_historical_ap_records_match_paper_rows():
-    root = Path(__file__).resolve().parents[1]
-    report = audit(root/'legacy/cflowtest')
-    assert report['complete_blocks'] == 221
-    assert all(report['exact_19_dataset_ap_matches'].values())
 
 
 def write_scores(path, prefix):

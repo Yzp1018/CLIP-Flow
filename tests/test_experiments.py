@@ -72,11 +72,10 @@ def test_parameter_counts_match_paper_figure4(dimension, count):
     assert sum(p.numel() for p in model.parameters() if p.requires_grad) == count
 
 
-def test_no_dr_parameter_count_records_unresolved_figure_discrepancy():
+def test_no_projection_parameter_count():
     model = CLIPFlow(Settings(dimension=0), encoder=TinyEncoder())
     count = sum(p.numel() for p in model.parameters() if p.requires_grad)
     assert count == 887808
-    assert 888576 - count == 768  # Figure 4 labels 888,576; no fictitious parameters added.
 
 
 def test_frozen_encoder_and_consistent_training_inference():

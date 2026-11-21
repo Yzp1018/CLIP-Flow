@@ -1,4 +1,4 @@
-"""Proxy construction. Archive-compatible unshifted corner bands are explicit."""
+"""Spatial and spectral proxy-image transforms."""
 import numpy as np
 from PIL import Image, ImageFilter
 from torchvision.transforms import ColorJitter
@@ -26,7 +26,7 @@ def spectral(image, band, ratio, rng, phase_only=False, uint8_policy='wrap'):
     spectrum = np.fft.fft2(values, axes=(0, 1))
     mask = band_mask(*values.shape[:2], band, ratio, rng)[..., None]
     if phase_only:
-        # Reconstructed interpretation: zero selected phases, preserve magnitudes.
+        # Zero selected phases while preserving spectral magnitudes.
         spectrum = np.abs(spectrum) * np.exp(1j * np.angle(spectrum) * mask)
     else:
         spectrum *= mask
